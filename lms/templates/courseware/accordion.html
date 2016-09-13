@@ -7,7 +7,6 @@
     from django.conf import settings
     from openedx.core.djangolib.markup import HTML, Text
 %>
-
 <%def name="make_chapter(chapter)">
 <%
 if chapter.get('active'):
@@ -32,13 +31,34 @@ else:
                         span_start=HTML('<span class="sr">'),
                         span_end=HTML('</span>'),
                     ) if 'active' in section and section['active'] else ''}</p>
-                <%
-                if section.get('due') is None:
-                    due_date = ''
-                else:
-                    formatted_string = get_time_display(section['due'], due_date_display_format, coerce_tz=time_zone)
-                    due_date = '' if len(formatted_string)==0 else _('due {date}').format(date=formatted_string)
-                %>
+
+
+
+                <!--This is a POC Test for FE-generated Timezone displays-->
+                % if section.get('due') is None:
+                     <%
+                        due_date = ''
+                    %>
+                % else:
+                    % if time_zone is not None:
+                        <%
+                            formatted_string = get_time_display(section['due'], due_date_display_format, coerce_tz=time_zone)
+                            due_date = '' if len(formatted_string)==0 else _('due {date}').format(date=formatted_string)
+                        %>
+                        <script>console.log("${formatted_string}")</script>
+                    % else:
+                        ## load data first
+                        ## (obvs) will move to static file build
+                        <script type"text/javascript" src="http://momentjs.com/downloads/moment-timezone-with-data-2010-2020.js"></script>
+                        <script type="text/javascript" src="http://momentjs.com/downloads/moment-timezone.js"></script>
+
+                        <%
+                            due_date = ''
+                        %>
+                    % endif
+                % endif
+
+
 
                 ## There is behavior differences between
                 ## rendering of sections which have proctoring/timed examinations
@@ -57,12 +77,33 @@ else:
                         ## completed proctored exam statuses should not show the due date
                         ## since the exam has already been submitted by the user
                         % if not section['proctoring'].get('in_completed_state', False):
-                            <span class="subtitle-name">${due_date}</span>
+                            <span id=${section['url_name']} class="subtitle-name">${due_date}</span>
                         % endif
                     % else:
                         ## non-proctored section, we just show the exam format and the due date
                         ## this is the standard case in edx-platform
-                        <span class="subtitle-name">${section['format']} ${due_date}</span>
+                        ## added in section id for date overwrite
+                        <span id=${section['url_name']} class="subtitle-name">${section['format']} ${due_date}</span>
+                        <script>
+                        if ('${section['due']}' != 'None') {
+                            function format_date() {
+                                var orig_date = "${section['due']}";
+                                var local_time = moment(orig_date).local();
+                                //'Sep 13, 2016 3:36 PM'
+                                // -->
+                                // Oct 14, 2016 at 8:00 UTC
+                                var formatted_time = local_time.format('ll [at] HH[:]mm');
+                                var time_zone_abbr = moment(local_time).tz(moment.tz.guess()).format('z')
+                                console.log("${due_date}")
+                                console.log([ 'due', formatted_time, time_zone_abbr ].join(' '))
+                                return [ 'due', formatted_time, time_zone_abbr ].join(' ')
+                                }
+                            formatted_date = format_date()
+                            console.log((["${section['format']}", formatted_date ]).join(' '))
+
+                            $('#${section['url_name']}').text(["${section['format']}", formatted_date ].join(' '));
+                            }
+                        </script>
 
                         % if 'graded' in section and section['graded']:
                             <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
@@ -88,3 +129,4 @@ else:
         AccordionEvents();
     </%static:require_module_async>
 % endif
+
