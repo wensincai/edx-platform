@@ -505,9 +505,7 @@ def render_accordion(request, course, table_of_contents):
             ('course_id', unicode(course.id)),
             ('csrf', csrf(request)['csrf_token']),
             ('due_date_display_format', course.due_date_display_format),
-            # ('time_zone', get_user_time_zone(request.user).zone),
-            ##TEST
-            ('time_zone', None),
+            ('time_zone', get_user_time_zone(request.user).zone),
 
         ] + TEMPLATE_IMPORTS.items()
     )
