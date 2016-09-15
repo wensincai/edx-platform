@@ -171,13 +171,22 @@ from django.utils.http import urlquote_plus
                     ${section.format | h}
 
                     %if section.due is not None:
-                      <%
-                          formatted_string = get_time_display(section.due, course.due_date_display_format, coerce_tz=settings.TIME_ZONE_DISPLAYED_FOR_DEADLINES)
-                          due_date = '' if len(formatted_string)==0 else _(u'due {date}').format(date=formatted_string)
-                      %>
-                      <em>
-                      ${due_date | h}
+                      <!--must find unique identifier-->
+                      <em id="${chapter['url_name']}">
                       </em>
+                      <script type="text/javascript" src="http://momentjs.com/downloads/moment-timezone-with-data.js"></script>
+                      <script type="text/javascript" src="http://momentjs.com/downloads/moment-timezone.js"></script>
+                      <script type="text/javascript" src="${static.url('js/localized_times.js')}"></script>
+                      <script>
+                        ## // run function
+                        localized_datetime = localized_time_display(
+                            time_zone="${time_zone}",
+                            display_date="${section.due}",
+                            string="due"
+                            )
+                        $('#${chapter['url_name']}').text(localized_datetime);
+                      </script>
+
                     %endif
                   </p>
 

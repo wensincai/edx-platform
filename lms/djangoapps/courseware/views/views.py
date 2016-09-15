@@ -42,6 +42,7 @@ from lms.djangoapps.ccx.utils import prep_course_for_grading
 from certificates import api as certs_api
 from certificates.models import CertificateStatuses
 from openedx.core.djangoapps.models.course_details import CourseDetails
+from openedx.core.lib.time_zone_utils import get_user_time_zone
 from commerce.utils import EcommerceService
 from enrollment.api import add_enrollment
 from course_modes.models import CourseMode
@@ -741,7 +742,8 @@ def _progress(request, course_key, student_id):
         'student': student,
         'passed': is_course_passed(course, grade_summary),
         'credit_course_requirements': _credit_course_requirements(course_key, student),
-        'certificate_data': _get_cert_data(student, course, course_key, is_active, enrollment_mode)
+        'certificate_data': _get_cert_data(student, course, course_key, is_active, enrollment_mode),
+        'time_zone': get_user_time_zone(request.user).zone
     }
 
     with outer_atomic():

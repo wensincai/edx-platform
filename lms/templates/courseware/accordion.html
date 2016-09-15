@@ -2,7 +2,7 @@
 <%namespace name='static' file='../static_content.html'/>
 <%!
     from django.core.urlresolvers import reverse
-    from util.date_utils import get_time_display
+##     from util.date_utils import get_time_display
     from django.utils.translation import ugettext as _
     from django.conf import settings
     from openedx.core.djangolib.markup import HTML, Text
@@ -41,47 +41,19 @@ else:
                     ## based on the user's browser settings
 
                     ## load data first
-                    ## (obvs) will move deps to static file build
-                    <script type"text/javascript" src="http://momentjs.com/downloads/moment-timezone-with-data-2010-2020.js"></script>
+                    ## (obvs) will move deps to the appropriate place in the build, likely using require.js
+                    <script type="text/javascript" src="http://momentjs.com/downloads/moment-timezone-with-data.js"></script>
                     <script type="text/javascript" src="http://momentjs.com/downloads/moment-timezone.js"></script>
+                    <script type="text/javascript" src="${static.url('js/localized_times.js')}"></script>
+
                     <script>
-                        ## global string for dates
-                        var local_due_date = ''
-
-                        ## Make me true to test browser generated timezones
-                        var test_browser = false
-
-                        function format_date_pref_tz() {
-                            ## to imitate the state of the current workflow,
-                            ## 'formatted_string' should look like
-                            ## -->
-                            ## Oct 14, 2016 at 8:00 UTC
-                            if ("${time_zone}" == "None" || test_browser == true) {
-                                console.log('browser gen tz')
-                                zone = moment.tz.guess()
-                            }
-                            else {
-                                console.log('prefs gen tz')
-                                zone = "${time_zone}"
-                            }
-                            var js_due_date = moment("${section['due']}").tz('UTC');
-                            ## UTC Object
-                            console.log(js_due_date.format('ha z'));
-
-                            ## Localized Object
-                            var localized_time = js_due_date.tz(zone).format('ll [at] HH[:]mm z');
-
-                            return localized_time
-                            }
-                        formatted_string = format_date_pref_tz()
-                        local_due_date = edx.StringUtils.interpolate(
-                                gettext('due {date}'),
-                                {
-                                    'date': formatted_string
-                                }
-                            )
+                    ## // run function
+                    local_due_date = localized_time_display(
+                        time_zone="${time_zone}",
+                        display_date="${section['due']}",
+                        string="due"
+                        )
                     </script>
-                    ## Just to be polite, but can be eliminated
                 % endif
                 <!--This is a POC Test for FE-generated Timezone displays-->
 
