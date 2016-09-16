@@ -174,8 +174,7 @@ from django.utils.http import urlquote_plus
                       <!--must find unique identifier-->
                       <em id="${chapter['url_name']}">
                       </em>
-                      <script type="text/javascript" src="http://momentjs.com/downloads/moment-timezone-with-data.js"></script>
-                      <script type="text/javascript" src="http://momentjs.com/downloads/moment-timezone.js"></script>
+                    <script type="text/javascript" src="${static.url('js/moment-timezone-with-data.js')}"></script>
                       <script type="text/javascript" src="${static.url('js/localized_times.js')}"></script>
                       <script>
                         ## // run function
