@@ -12,6 +12,8 @@ def get_user_time_zone(user):
     """
     #TODO: exception for unknown timezones?
     time_zone = user.preferences.model.get_value(user, "time_zone", None)
+    if time_zone is None:
+        return None
     return timezone(time_zone)
 
 
