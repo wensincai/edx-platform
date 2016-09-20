@@ -1,5 +1,6 @@
 <%page expression_filter="h"/>
 <%namespace name='static' file='../static_content.html'/>
+
 <%!
     from django.core.urlresolvers import reverse
 ##     from util.date_utils import get_time_display
@@ -7,6 +8,7 @@
     from django.conf import settings
     from openedx.core.djangolib.markup import HTML, Text
 %>
+
 <%def name="make_chapter(chapter)">
 <%
 if chapter.get('active'):
@@ -16,6 +18,7 @@ else:
     aria_label = chapter['display_name']
     active_class = ''
 %>
+
 <a href="#${chapter['display_id']}-child" role="button" class="button-chapter chapter ${active_class}" id="${chapter['display_id']}-parent" aria-controls="${chapter['display_id']}-child" aria-expanded="false">
     <span class="group-heading ${active_class}" aria-label="${aria_label}">
         <span class="icon fa fa-caret-right" aria-hidden="true"></span>
@@ -31,32 +34,6 @@ else:
                         span_start=HTML('<span class="sr">'),
                         span_end=HTML('</span>'),
                     ) if 'active' in section and section['active'] else ''}</p>
-
-
-
-                <!--This is a POC Test for FE-generated Timezone displays-->
-                % if section.get('due') is not None:
-                    ## If we don't get a time_zone object (user pref)
-                    ## from django, we'll set the len of ${due_date} to none and perform a js transformation
-                    ## based on the user's browser settings
-
-                    ## load data first
-                    ## (obvs) will move deps to the appropriate place in the build, likely using require.js
-                    <script type="text/javascript" src="${static.url('js/moment-timezone-with-data.js')}"></script>
-                    <script type="text/javascript" src="${static.url('js/localized_times.js')}"></script>
-
-                    <script>
-                    ## // run function
-                    local_due_date = localized_time_display(
-                        time_zone="${time_zone}",
-                        display_date="${section['due']}",
-                        string="due"
-                        )
-                    </script>
-                % endif
-                <!--This is a POC Test for FE-generated Timezone displays-->
-
-
                 ## There is behavior differences between
                 ## rendering of sections which have proctoring/timed examinations
                 ## and those that do not.
@@ -64,9 +41,11 @@ else:
                 ## Proctoring exposes a exam status message field as well as
                 ## a status icon
 
-                % if section['format'] or 'proctoring' in section or section.get('due') is not None:
+##                 % if section['format'] or 'proctoring' in section or section.get('due') is not None:
+                % if 'proctoring' in section:
+##                 % endif
                 <p class="subtitle">
-                    % if 'proctoring' in section:
+##                     % if 'proctoring' in section:
                         ## Display the proctored exam status icon and status message
                         <span class="menu-icon icon fa ${section['proctoring'].get('suggested_icon', 'fa-pencil-square-o')} ${section['proctoring'].get('status', 'eligible')}" aria-hidden="true"></span>
                         <span class="subtitle-name">${section['proctoring'].get('short_description', '')}</span>
@@ -75,28 +54,22 @@ else:
                         ## since the exam has already been submitted by the user
                         % if not section['proctoring'].get('in_completed_state', False):
 
-                            <span id=${section['url_name']} class="subtitle-name"></span>
-                            <script>
-                                if (typeof local_due_date != 'undefined' && local_due_date != 'INVALID DATE') {
-                                    $('#${section['url_name']}').text(local_due_date);
-                                }
-                            </script>
-                        % endif
-                    % else:
-                        ## non-proctored section, we just show the exam format and the due date
-                        ## this is the standard case in edx-platform
-                        ## added in section id for date overwrite
-                        <span id=${section['url_name']} class="subtitle-name"></span>
-                        <script>
-                            if (typeof local_due_date != 'undefined' && local_due_date != 'INVALID DATE') {
-                                $('#${section['url_name']}').text(["${section['format']}", local_due_date ].join(' '));
-                            }
-                        </script>
+                            <span class="localized-datetime subtitle-name" data-date="${section['due']}" data-string="" data-time_zone="${time_zone}" data-locale="${locale}"></span>
 
-                        % if 'graded' in section and section['graded']:
-                            <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
-                            <span class="sr">${_("This content is graded")}</span>
                         % endif
+                </p>
+                % elif section.get('due') is not None:
+                    <p class="subtitle">
+##                     % else:
+                    ## non-proctored section, we just show the exam format and the due date
+                    ## this is the standard case in edx-platform
+                    ## added in the HTML5 data elements for the local timezone
+                    ##
+                    <span class="localized-datetime subtitle-name" data-date="${section['due']}" data-string="due" data-time_zone="${time_zone}" data-locale="${locale}"></span>
+                    % if 'graded' in section and section['graded']:
+                        <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
+                        <span class="sr">${_("This content is graded")}</span>
+##                     % endif
                     % endif
                 </p>
                 % endif
@@ -117,4 +90,7 @@ else:
         AccordionEvents();
     </%static:require_module_async>
 % endif
+
+<script type="text/javascript" src="${static.url('js/moment-timezone-with-data.js')}"></script>
+<script type="text/javascript" src="${static.url('js/localized_times.js')}"></script>
 

@@ -28,6 +28,8 @@ from django.utils.http import urlquote_plus
 <script type="text/javascript" src="${static.url('js/vendor/flot/jquery.flot.symbol.js') | h}"></script>
 <script type="text/javascript" src="${static.url('js/courseware/certificates_api.js') | h}"></script>
 <script type="text/javascript" src="${static.url('js/courseware/credit_progress.js') | h}"></script>
+<script type="text/javascript" src="${static.url('js/moment-timezone-with-data.js')}"></script>
+<script type="text/javascript" src="${static.url('js/localized_times.js')}"></script>
 <script>
   ${progress_graph.body(grade_summary, course.grade_cutoffs, "grade-detail-graph", not course.no_grade, not course.no_grade) | h}
 </script>
@@ -171,21 +173,8 @@ from django.utils.http import urlquote_plus
                     ${section.format | h}
 
                     %if section.due is not None:
-                      <!--must find unique identifier-->
-                      <em id="${chapter['url_name']}">
+                      <em class="localized-datetime" data-date="${section.due}" data-string="due" data-time_zone="${time_zone}" data-locale="${locale}">
                       </em>
-                    <script type="text/javascript" src="${static.url('js/moment-timezone-with-data.js')}"></script>
-                      <script type="text/javascript" src="${static.url('js/localized_times.js')}"></script>
-                      <script>
-                        ## // run function
-                        localized_datetime = localized_time_display(
-                            time_zone="${time_zone}",
-                            display_date="${section.due}",
-                            string="due"
-                            )
-                        $('#${chapter['url_name']}').text(localized_datetime);
-                      </script>
-
                     %endif
                   </p>
 
