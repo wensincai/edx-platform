@@ -34,6 +34,7 @@
             'date': 'xmodule_js/common_static/js/vendor/date',
             'moment': 'xmodule_js/common_static/js/vendor/moment.min',
             'moment-with-locales': 'xmodule_js/common_static/js/vendor/moment-with-locales.min',
+            'moment-timezone': 'js/vendor/moment-timezone-with-data',
             'text': 'xmodule_js/common_static/js/vendor/requirejs/text',
             'underscore': 'common/js/vendor/underscore',
             'underscore.string': 'common/js/vendor/underscore.string',

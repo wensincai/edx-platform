@@ -90,7 +90,22 @@ else:
         AccordionEvents();
     </%static:require_module_async>
 % endif
+## <script>
+##     $('.localized-datetime').each(
+## ##             var time_zone
+##             time_zone = $(this).data('time_zone')
+## ##             console.log($(this).data('time_zone'))
+##     )
+## </script>
 
-<script type="text/javascript" src="${static.url('js/moment-timezone-with-data.js')}"></script>
-<script type="text/javascript" src="${static.url('js/localized_times.js')}"></script>
+## <script type="text/javascript" src="${static.url('js/moment-timezone-with-data.js')}"></script>
+<%static:require_module_async module_name="js/student_account/date_util" class_name="LocalizedDatetime">
+    LocalizedDatetime();
+</%static:require_module_async>
+
+
+## <%static:require_module_async module_name="js/student_account/date_util.js" class_name="SayHi">
+##     SayHi();
+## </%static:require_module_async>
+
 
