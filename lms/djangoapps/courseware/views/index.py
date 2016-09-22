@@ -504,9 +504,6 @@ def render_accordion(request, course, table_of_contents, language_preference):
     Expects the table_of_contents to have data on each chapter and section,
     including which ones are active.
     """
-    user_time_zone = get_user_time_zone(request.user)
-    if user_time_zone is not None:
-        user_time_zone = user_time_zone.zone
 
     context = dict(
         [
@@ -514,7 +511,7 @@ def render_accordion(request, course, table_of_contents, language_preference):
             ('course_id', unicode(course.id)),
             ('csrf', csrf(request)['csrf_token']),
             ('due_date_display_format', course.due_date_display_format),
-            ('time_zone', user_time_zone),
+            ('time_zone', get_user_time_zone(request.user)),
             ('locale', language_preference)
 
         ] + TEMPLATE_IMPORTS.items()

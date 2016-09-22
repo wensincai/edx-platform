@@ -3,7 +3,6 @@
 
 <%!
     from django.core.urlresolvers import reverse
-##     from util.date_utils import get_time_display
     from django.utils.translation import ugettext as _
     from django.conf import settings
     from openedx.core.djangolib.markup import HTML, Text
@@ -41,11 +40,8 @@ else:
                 ## Proctoring exposes a exam status message field as well as
                 ## a status icon
 
-##                 % if section['format'] or 'proctoring' in section or section.get('due') is not None:
                 % if 'proctoring' in section:
-##                 % endif
-                <p class="subtitle">
-##                     % if 'proctoring' in section:
+                    <p class="subtitle">
                         ## Display the proctored exam status icon and status message
                         <span class="menu-icon icon fa ${section['proctoring'].get('suggested_icon', 'fa-pencil-square-o')} ${section['proctoring'].get('status', 'eligible')}" aria-hidden="true"></span>
                         <span class="subtitle-name">${section['proctoring'].get('short_description', '')}</span>
@@ -60,16 +56,16 @@ else:
                 </p>
                 % elif section.get('due') is not None:
                     <p class="subtitle">
-##                     % else:
+
                     ## non-proctored section, we just show the exam format and the due date
                     ## this is the standard case in edx-platform
+                    ##
                     ## added in the HTML5 data elements for the local timezone
                     ##
                     <span class="localized-datetime subtitle-name" data-date="${section['due']}" data-string="due" data-time_zone="${time_zone}" data-locale="${locale}"></span>
                     % if 'graded' in section and section['graded']:
                         <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
                         <span class="sr">${_("This content is graded")}</span>
-##                     % endif
                     % endif
                 </p>
                 % endif
@@ -90,22 +86,8 @@ else:
         AccordionEvents();
     </%static:require_module_async>
 % endif
-## <script>
-##     $('.localized-datetime').each(
-## ##             var time_zone
-##             time_zone = $(this).data('time_zone')
-## ##             console.log($(this).data('time_zone'))
-##     )
-## </script>
 
-## <script type="text/javascript" src="${static.url('js/moment-timezone-with-data.js')}"></script>
 <%static:require_module_async module_name="js/student_account/date_util" class_name="LocalizedDatetime">
     LocalizedDatetime();
 </%static:require_module_async>
-
-
-## <%static:require_module_async module_name="js/student_account/date_util.js" class_name="SayHi">
-##     SayHi();
-## </%static:require_module_async>
-
 
