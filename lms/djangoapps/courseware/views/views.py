@@ -733,10 +733,6 @@ def _progress(request, course_key, student_id):
     # checking certificate generation configuration
     enrollment_mode, is_active = CourseEnrollment.enrollment_mode_for_user(student, course_key)
 
-    user_time_zone = get_user_time_zone(request.user)
-    if user_time_zone is not None:
-        user_time_zone = user_time_zone.zone
-
     context = {
         'course': course,
         'courseware_summary': courseware_summary,
@@ -747,9 +743,9 @@ def _progress(request, course_key, student_id):
         'passed': is_course_passed(course, grade_summary),
         'credit_course_requirements': _credit_course_requirements(course_key, student),
         'certificate_data': _get_cert_data(student, course, course_key, is_active, enrollment_mode),
-        'time_zone': user_time_zone,
+        'time_zone': get_user_time_zone(request.user),
         'locale': request.user.preferences.model.get_value(request.user, "pref-lang", None)
-    }
+        }
 
     with outer_atomic():
         response = render_to_response('courseware/progress.html', context)

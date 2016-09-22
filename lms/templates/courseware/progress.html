@@ -28,8 +28,6 @@ from django.utils.http import urlquote_plus
 <script type="text/javascript" src="${static.url('js/vendor/flot/jquery.flot.symbol.js') | h}"></script>
 <script type="text/javascript" src="${static.url('js/courseware/certificates_api.js') | h}"></script>
 <script type="text/javascript" src="${static.url('js/courseware/credit_progress.js') | h}"></script>
-<script type="text/javascript" src="${static.url('js/moment-timezone-with-data.js')}"></script>
-<script type="text/javascript" src="${static.url('js/datetime_localize.js')}"></script>
 <script>
   ${progress_graph.body(grade_summary, course.grade_cutoffs, "grade-detail-graph", not course.no_grade, not course.no_grade) | h}
 </script>
@@ -126,7 +124,15 @@ from django.utils.http import urlquote_plus
                                         <span>${_("Verification Declined" )}</span>
                                     %elif requirement['status'] == 'satisfied':
                                         <span class="fa fa-check" aria-hidden="true"></span>
-                                        <span>${_("Completed by")} ${get_time_display(requirement['status_date'], DEFAULT_SHORT_DATE_FORMAT, settings.TIME_ZONE)}</span>
+                                        <span
+                                            class="localized-datetime"
+                                            data-date="requirement['status_date']"
+                                            data-string="Completed by"
+                                            data-time_zone="${time_zone}"
+                                            data-locale="${locale}"
+                                            format="DEFAULT_SHORT_DATE_FORMAT">
+                                        </span>
+
                                     %endif
                                 %else:
                                     <span class="not-achieve">${_("Upcoming")}</span>
@@ -173,7 +179,12 @@ from django.utils.http import urlquote_plus
                     ${section.format | h}
 
                     %if section.due is not None:
-                      <em class="localized-datetime" data-date="${section.due}" data-string="due" data-time_zone="${time_zone}" data-locale="${locale}">
+                      <em
+                          class="localized-datetime"
+                          data-date="${section.due}"
+                          data-string="Due: "
+                          data-time_zone="${time_zone}"
+                          data-locale="${locale}">
                       </em>
                     %endif
                   </p>
@@ -203,4 +214,9 @@ from django.utils.http import urlquote_plus
         </div>
       </div>
     </div>
+
+<%static:require_module_async module_name="js/student_account/date_display" class_name="DateDisplay">
+    DateDisplay();
+</%static:require_module_async>
+
 </main>
