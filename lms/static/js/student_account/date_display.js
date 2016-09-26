@@ -30,7 +30,7 @@
 
     define([
         'jquery',
-        'js/student_account/date_utils'
+        'js/student_account/date-utils'
     ], function(
         $,
         DateUtils
