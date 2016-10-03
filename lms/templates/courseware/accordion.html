@@ -50,7 +50,7 @@ else:
                         ## since the exam has already been submitted by the user
                         % if not section['proctoring'].get('in_completed_state', False):
 
-                            <span class="localized-datetime subtitle-name" data-date="${section['due']}" data-string="" data-time_zone="${time_zone}" data-locale="${locale}"></span>
+                            <span class="localized-datetime subtitle-name" data-datetime="${section['due']}" data-string="" data-time_zone="${time_zone}" lang="${locale}"></span>
 
                         % endif
                 </p>
@@ -62,7 +62,7 @@ else:
                     ##
                     ## added in the HTML5 data elements for the local timezone
                     ##
-                    <span class="localized-datetime subtitle-name" data-date="${section['due']}" data-string="due" data-time_zone="${time_zone}" data-locale="${locale}"></span>
+                    <span class="localized-datetime subtitle-name" data-datetime="${section['due']}" data-string="due" data-time_zone="${time_zone}" lang="${locale}"></span>
                     % if 'graded' in section and section['graded']:
                         <span class="menu-icon icon fa fa-pencil-square-o" aria-hidden="true"></span>
                         <span class="sr">${_("This content is graded")}</span>
@@ -87,7 +87,7 @@ else:
     </%static:require_module_async>
 % endif
 
-<%static:require_module_async module_name="js/student_account/date_display" class_name="DateDisplay">
+<%static:require_module_async module_name="js/date-util_helper" class_name="DateDisplay">
     DateDisplay();
 </%static:require_module_async>
 
