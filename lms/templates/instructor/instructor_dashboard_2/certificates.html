@@ -1,6 +1,9 @@
 <%page args="section_data" expression_filter="h"/>
 <%namespace name='static' file='../../static_content.html'/>
 
+<%def name="online_help_token()"><% return "instructorcerts" %></%def>
+<%def name="doc_base_url()"><% return settings.INSTRUCTOR_DOC_LINK_BASE_URL %></%def>
+
 <%!
 from django.utils.translation import ugettext as _
 from openedx.core.djangolib.js_utils import dump_js_escaped_json, js_escaped_string

@@ -1,4 +1,8 @@
 <%namespace name='static' file='/static_content.html'/>
+
+<%def name="online_help_token()"><% return "instructormembership" %></%def>
+<%def name="doc_base_url()"><% return settings.INSTRUCTOR_DOC_LINK_BASE_URL %></%def>
+
 <%page args="section_data"/>
 <%!
 from django.utils.translation import ugettext as _

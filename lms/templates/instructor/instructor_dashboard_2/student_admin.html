@@ -1,4 +1,8 @@
 <%page args="section_data" expression_filter="h"/>
+
+<%def name="online_help_token()"><% return "instructoradmin" %></%def>
+<%def name="doc_base_url()"><% return settings.INSTRUCTOR_DOC_LINK_BASE_URL %></%def>
+
 <%! from django.utils.translation import ugettext as _ %>
 <div>
   %if section_data['is_small_course']:

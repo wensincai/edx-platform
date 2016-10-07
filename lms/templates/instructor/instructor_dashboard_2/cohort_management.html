@@ -1,5 +1,8 @@
 <%page expression_filter="h" args="section_data"/>
 
+<%def name="online_help_token()"><% return "instructorcohorts" %></%def>
+<%def name="doc_base_url()"><% return settings.INSTRUCTOR_DOC_LINK_BASE_URL %></%def>
+
 <%namespace name='static' file='../../static_content.html'/>
 <%!
 from django.utils.translation import ugettext as _
