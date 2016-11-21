@@ -114,13 +114,18 @@
                                 model: userPreferencesModel,
                                 required: true,
                                 title: gettext('Time Zone'),
+
                                 valueAttribute: 'time_zone',
                                 helpMessage: gettext('Select the time zone for displaying course dates. If you do not specify a time zone, course dates, including assignment deadlines, will be displayed in your browser\'s local time zone.'), // eslint-disable-line max-len
                                 groupOptions: [{
                                     groupTitle: gettext('All Time Zones'),
-                                    selectOptions: fieldsData.time_zone.options
+                                    selectOptions: fieldsData.time_zone.options,
+                                    showBlankOption: false,
                                 }],
-                                persistChanges: true
+                                persistChanges: true,
+
+
+                                // showBlankOption: false
                             })
                         }
                     ]

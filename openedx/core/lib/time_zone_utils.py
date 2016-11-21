@@ -45,8 +45,13 @@ def get_display_time_zone(time_zone_name):
 
     return "{name} ({abbr}, UTC{offset})".format(name=time_zone, abbr=tz_abbr, offset=tz_offset).replace("_", " ")
 
+TIME_ZONE_NONE = [(None, 'Default')]
 
-TIME_ZONE_CHOICES = sorted(
+TIME_ZONE_ALL = sorted(
     [(tz, get_display_time_zone(tz)) for tz in common_timezones],
     key=lambda tz_tuple: tz_tuple[1]
 )
+for s in TIME_ZONE_ALL:
+    TIME_ZONE_NONE.append(s)
+
+TIME_ZONE_CHOICES = TIME_ZONE_NONE
