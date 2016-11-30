@@ -2127,6 +2127,40 @@ def auto_auth(request):
     return response
 
 
+def update_user(request):
+    """
+    Update user account with data in querystring parameters
+    Arguments:
+        request: http request object
+    Return:
+        HttpResponse with success message
+
+    Enabled only when
+    settings.FEATURES['AUTOMATIC_AUTH_FOR_TESTING'] is true.
+
+    Currently this method accepts following querystring parameters:
+        1. `username`: to fetch a user who is intended to be updated
+        2. `is_active`: value to update for user's attribute is_active
+
+    """
+    username = request.GET.get('username')
+    active_status = request.GET.get('is_active')
+
+    try:
+        user = User.objects.get(username=username)
+    except User.DoesNotExist:
+        return Http404
+
+    if active_status:
+        user.is_active = active_status == 'true'
+
+    user.save()
+    success_msg = u"user with username {username} is updated".format(username=username)
+    response = HttpResponse(success_msg)
+
+    return response
+
+
 @ensure_csrf_cookie
 def activate_account(request, key):
     """When link in activation e-mail is clicked"""
