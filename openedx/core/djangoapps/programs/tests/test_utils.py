@@ -1,9 +1,10 @@
 """Tests covering Programs utilities."""
 import copy
-import datetime
 import json
 from unittest import skipUnless
 import uuid
+from pytz import utc
+import datetime
 
 import ddt
 from django.conf import settings
@@ -909,3 +910,46 @@ class TestProgramDataExtender(ProgramsApiConfigMixin, ModuleStoreTestCase):
         mock_get_organization_by_short_name.return_value = {'logo': None}
         data = utils.ProgramDataExtender(self.program, self.user).extend()
         self.assertEqual(data['organizations'][0].get('img'), None)
+
+    def test_course_start_run_mode_date(self):
+        """
+        test format string generator for course.start
+        """
+
+        stringed_start_date = strftime_localized(self.course.start.astimezone(utc), "SHORT_DATE")
+        stringed_end_date = strftime_localized(self.course.end.astimezone(utc), "SHORT_DATE")
+        data = utils.ProgramDataExtender(self.program, self.user).extend()
+        print data['course_codes'][0]
+        self.assertEqual(data['course_codes'][0]['run_modes'][0]['start_date'], stringed_start_date)
+        self.assertEqual(data['course_codes'][0]['run_modes'][0]['end_date'], stringed_end_date)
+
+
+class TestCourseStartDatetimeText(TestCase):
+    """Tests of the start_datetime_text funciton."""
+
+    def test_simple_start_datetime_text(self):
+        """
+        date, no advertised_start
+        """
+        sample_start = datetime.datetime(2016, 3, 27, 00, 59, 00, tzinfo=utc)
+        sample_advertised_start = None
+
+        self.assertEqual(utils.course_start_datetime_text(sample_start, sample_advertised_start), 'Mar 27, 2016')
+
+    def test_unparsable_advertised_start(self):
+        """
+        date, advertised_start not parsable as a date
+        """
+        sample_start = datetime.datetime(2016, 3, 27, 00, 59, 00, tzinfo=utc)
+        sample_advertised_start = 'NOT A PARSEABLE DATE'
+        self.assertEqual(
+            utils.course_start_datetime_text(sample_start, sample_advertised_start), 'Not A Parseable Date'
+        )
+
+    def test_parsable_advertised_start(self):
+        """
+        date, advertised_start parsable as a date
+        """
+        sample_start = datetime.datetime(2016, 3, 27, 00, 59, 00, tzinfo=utc)
+        sample_advertised_start = '2016-03-31 00:59:00'
+        self.assertEqual(utils.course_start_datetime_text(sample_start, sample_advertised_start), 'Mar 31, 2016')

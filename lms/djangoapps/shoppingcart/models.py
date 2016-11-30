@@ -340,7 +340,7 @@ class Order(models.Model):
             course_id = item.course_id
             course = get_course_by_id(item.course_id, depth=0)
             registration_codes = CourseRegistrationCode.objects.filter(course_id=course_id, order=self)
-            course_info.append((course.display_name, ' (' + course.start_datetime_text() + '-' + course.end_datetime_text() + ')'))
+            course_info.append((course.display_name, ))
             for registration_code in registration_codes:
                 redemption_url = reverse('register_code_redemption', args=[registration_code.code])
                 url = '{base_url}{redemption_url}'.format(base_url=site_name, redemption_url=redemption_url)
@@ -358,8 +358,8 @@ class Order(models.Model):
         joined_course_names = ""
         if self.recipient_email:
             recipient_list.append((self.recipient_name, self.recipient_email, 'email_recipient'))
-            courses_names_with_dates = [course_info[0] + course_info[1] for course_info in courses_info]
-            joined_course_names = " " + ", ".join(courses_names_with_dates)
+            courses_names = [course_info[0] for course_info in courses_info]
+            joined_course_names = " " + ", ".join(courses_names)
 
         if not is_order_type_business:
             subject = _("Order Payment Confirmation")
