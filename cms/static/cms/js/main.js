@@ -38,6 +38,11 @@
                     'title': gettext("Studio's having trouble saving your work"),
                     'message': message
                 });
+                Logger.log('edx.studio.ajax_error', {
+                    url: event.currentTarget.URL,
+                    response: jqXHR.responseText,
+                    status: jqXHR.status
+                });
                 return msg.show();
             });
             $.postJSON = function(url, data, callback) {
