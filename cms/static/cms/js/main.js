@@ -25,18 +25,14 @@
                 dataType: 'json'
             });
             $(document).ajaxError(function(event, jqXHR, ajaxSettings) {
-                var message, msg;
+                var msg, contentType,
+                    message = gettext('This may be happening because of an error with our server or your internet connection. Try refreshing the page or making sure you are online.');  // eslint-disable-line max-len
                 if (ajaxSettings.notifyOnError === false) {
                     return;
                 }
-                if (jqXHR.responseText) {
-                    try {
-                        message = JSON.parse(jqXHR.responseText).error;
-                    } catch (error) {
-                        message = str.truncate(jqXHR.responseText, 300);
-                    }
-                } else {
-                    message = gettext('This may be happening because of an error with our server or your internet connection. Try refreshing the page or making sure you are online.');  // eslint-disable-line max-len
+                contentType = jqXHR.getResponseHeader('content-type');
+                if (contentType.indexOf('json') > -1) {
+                    message = JSON.parse(jqXHR.responseText).error;
                 }
                 msg = new NotificationView.Error({
                     'title': gettext("Studio's having trouble saving your work"),
