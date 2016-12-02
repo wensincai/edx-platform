@@ -4,7 +4,7 @@
     'use strict';
     define(['domReady', 'jquery', 'underscore.string', 'backbone', 'gettext',
             'common/js/components/views/feedback_notification', 'coffee/src/ajax_prefix',
-            'jquery.cookie'],
+            'jquery.cookie', 'js/src/logger'],
     function(domReady, $, str, Backbone, gettext, NotificationView) {
         var main;
         main = function() {
@@ -31,7 +31,7 @@
                     return;
                 }
                 contentType = jqXHR.getResponseHeader('content-type');
-                if (contentType.indexOf('json') > -1) {
+                if (contentType && contentType.indexOf('json') > -1 && jqXHR.responseText) {
                     message = JSON.parse(jqXHR.responseText).error;
                 }
                 msg = new NotificationView.Error({
