@@ -42,7 +42,7 @@
                     url: event.currentTarget.URL,
                     response: jqXHR.responseText,
                     status: jqXHR.status
-                });
+                }, null, {notifyOnError: false});
                 return msg.show();
             });
             $.postJSON = function(url, data, callback) {
