@@ -208,6 +208,11 @@
             },
             'js/src/logger': {
                 exports: 'Logger',
+                init: function() {
+                    return {
+                        log: function() {}
+                    };
+                },
                 deps: ['coffee/src/ajax_prefix']
             }
         }
@@ -295,7 +300,6 @@
     ];
 
     requireSerial(specHelpers.concat(testFiles), function() {
-        window.Logger = {log: function() {}};
         return window.__karma__.start();  // eslint-disable-line no-underscore-dangle
     });
 }).call(this, requirejs, requireSerial);
