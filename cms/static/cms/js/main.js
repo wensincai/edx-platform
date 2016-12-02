@@ -3,9 +3,9 @@
 (function(AjaxPrefix) {
     'use strict';
     define(['domReady', 'jquery', 'underscore.string', 'backbone', 'gettext',
-            'common/js/components/views/feedback_notification', 'coffee/src/ajax_prefix',
-            'jquery.cookie', 'js/src/logger'],
-    function(domReady, $, str, Backbone, gettext, NotificationView) {
+            'common/js/components/views/feedback_notification', 'js/src/logger',
+            'coffee/src/ajax_prefix', 'jquery.cookie'],
+    function(domReady, $, str, Backbone, gettext, NotificationView, Logger) {
         var main;
         main = function() {
             AjaxPrefix.addAjaxPrefix(jQuery, function() {
