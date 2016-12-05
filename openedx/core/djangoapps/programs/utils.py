@@ -434,20 +434,31 @@ class ProgramDataExtender(object):
             run_mode['upgrade_url'] = None
 
 
-def course_start_datetime_text(start_date, advertised_start=None):
+def deprecated_start_datetime_text(start_date, advertised_start=None):
     """
-    Thinking of using this function?
+    Thinking of using this function? Don't!
 
     Use the edx-ui-toolkit DateUtils instead!
 
     https://github.com/edx/edx-ui-toolkit
 
     This is a helper function to return a formatted date string corresponding
-    to the course's start date.
-    Calculates text to be shown to user regarding a course's start
-    datetime in specified time zone.
+    to a date, with an optional 'advertised_start' variable.
+    Calculates text to be shown to user regarding a datetime.
 
-    Prefers .advertised_start, then falls back to .start.
+    Prefers .advertised_start, then falls back to .start_date.
+
+    Arguments:
+        start_date (datetime): A datetime object.
+        advertised_start (string): (optional) A date or time descriptor that
+            could be a string rep of a datetime, (e.g. 1918-11-11 06:35) or
+            could be a simple descriptive string (e.g. 'Fall 1918')
+
+    Returns:
+        (string)
+        a string representation of a datetime, in short format (e.g. Nov 11th, 1918)
+        or the advertised_start variable if not parsable as a datetime
+
 
     """
     if advertised_start is not None:

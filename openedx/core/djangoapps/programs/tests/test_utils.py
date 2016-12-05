@@ -919,13 +919,12 @@ class TestProgramDataExtender(ProgramsApiConfigMixin, ModuleStoreTestCase):
         stringed_start_date = strftime_localized(self.course.start.astimezone(utc), "SHORT_DATE")
         stringed_end_date = strftime_localized(self.course.end.astimezone(utc), "SHORT_DATE")
         data = utils.ProgramDataExtender(self.program, self.user).extend()
-        print data['course_codes'][0]
         self.assertEqual(data['course_codes'][0]['run_modes'][0]['start_date'], stringed_start_date)
         self.assertEqual(data['course_codes'][0]['run_modes'][0]['end_date'], stringed_end_date)
 
 
 class TestCourseStartDatetimeText(TestCase):
-    """Tests of the start_datetime_text funciton."""
+    """Tests of the start_datetime_text function."""
 
     def test_simple_start_datetime_text(self):
         """
