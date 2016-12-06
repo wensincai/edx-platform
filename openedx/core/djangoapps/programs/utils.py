@@ -3,16 +3,14 @@
 import datetime
 import logging
 from urlparse import urljoin
-from pytz import utc
-
-from xmodule.fields import Date
 
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.utils import timezone
 from django.utils.text import slugify
+from django.utils.translation import ugettext as _
 from opaque_keys.edx.keys import CourseKey
-from django.utils.translation import ugettext
+from pytz import utc
 
 from course_modes.models import CourseMode
 from lms.djangoapps.certificates import api as certificate_api
@@ -408,11 +406,22 @@ class ProgramDataExtender(object):
     def _attach_run_mode_marketing_url(self, run_mode):
         run_mode['marketing_url'] = get_run_marketing_url(self.course_key, self.user)
 
-    def _attach_run_mode_start_date(self, run_mode):
-        run_mode['start_date'] = deprecated_start_datetime_text(
-            self.course_overview.start,
-            self.course_overview.advertised_start
-        )
+    def _attach_run_mode_start_date(self):
+        if self.course_overview.advertised_start is not None:
+            try:
+                # from_json either returns a Date, returns None, or raises a ValueError
+                parsed_advertised_start = Date().from_json(self.course_overview.advertised_start)
+                if parsed_advertised_start is not None:
+                    run_mode['start_date'] = strftime_localized(parsed_advertised_start.astimezone(utc), "SHORT_DATE")
+            except ValueError:
+                pass
+            run_mode['start_date'] = self.course_overview.advertised_start.title()
+        elif self.course_overview.start_date != DEFAULT_ENROLLMENT_START_DATE:
+            run_mode['start_date'] = strftime_localized(self.course_overview.start_date.astimezone(utc), "SHORT_DATE")
+        else:
+            # Translators: TBD stands for 'To Be Determined' and is used when a course
+            # does not yet have an announced start date.
+            run_mode['start_date'] = _('TBD')
 
     def _attach_run_mode_upgrade_url(self, run_mode):
         required_mode_slug = run_mode['mode_slug']
@@ -432,48 +441,3 @@ class ProgramDataExtender(object):
                 run_mode['upgrade_url'] = None
         else:
             run_mode['upgrade_url'] = None
-
-
-def deprecated_start_datetime_text(start_date, advertised_start=None):
-    """
-    Thinking of using this function? Don't!
-
-    Use the edx-ui-toolkit DateUtils instead!
-
-    https://github.com/edx/edx-ui-toolkit
-
-    This is a helper function to return a formatted date string corresponding
-    to a date, with an optional 'advertised_start' variable.
-    Calculates text to be shown to user regarding a datetime.
-
-    Prefers .advertised_start, then falls back to .start_date.
-
-    Arguments:
-        start_date (datetime): A datetime object.
-        advertised_start (string): (optional) A date or time descriptor that
-            could be a string rep of a datetime, (e.g. 1918-11-11 06:35) or
-            could be a simple descriptive string (e.g. 'Fall 1918')
-
-    Returns:
-        (string)
-        a string representation of a datetime, in short format (e.g. Nov 11th, 1918)
-        or the advertised_start variable if not parsable as a datetime
-
-
-    """
-    if advertised_start is not None:
-        try:
-            # from_json either returns a Date, returns None, or raises a ValueError
-            parsed_advertised_start = Date().from_json(advertised_start)
-            if parsed_advertised_start is not None:
-                return strftime_localized(parsed_advertised_start.astimezone(utc), "SHORT_DATE")
-        except ValueError:
-            pass
-        return advertised_start.title()
-    elif start_date != DEFAULT_ENROLLMENT_START_DATE:
-        return strftime_localized(start_date.astimezone(utc), "SHORT_DATE")
-    else:
-        _ = ugettext
-        # Translators: TBD stands for 'To Be Determined' and is used when a course
-        # does not yet have an announced start date.
-        return _('TBD')

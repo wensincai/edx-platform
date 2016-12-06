@@ -197,10 +197,11 @@ class CourseFields(object):
         scope=Scope.settings,
     )
     advertised_start = String(
-        display_name=_("Course Advertised Start Date"),
+        display_name=_("Course Advertised Start"),
         help=_(
-            "Enter the date you want to advertise as the course start date, if this date is different from the set "
-            "start date. To advertise the set start date, enter null."
+            # pylint: disable=C0301
+            "Enter a date or string (\'Fall 2025\' or \'Later this year\') as the advertised starting time frame for the course, if this is different from the start date you have set. "
+            "To use the start date that you have set, enter null for the value."
         ),
         scope=Scope.settings
     )
