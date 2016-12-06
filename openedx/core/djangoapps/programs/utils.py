@@ -409,7 +409,7 @@ class ProgramDataExtender(object):
         run_mode['marketing_url'] = get_run_marketing_url(self.course_key, self.user)
 
     def _attach_run_mode_start_date(self, run_mode):
-        run_mode['start_date'] = course_start_datetime_text(
+        run_mode['start_date'] = deprecated_start_datetime_text(
             self.course_overview.start,
             self.course_overview.advertised_start
         )

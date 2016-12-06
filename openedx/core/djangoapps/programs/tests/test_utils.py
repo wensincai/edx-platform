@@ -933,7 +933,7 @@ class TestCourseStartDatetimeText(TestCase):
         sample_start = datetime.datetime(2016, 3, 27, 00, 59, 00, tzinfo=utc)
         sample_advertised_start = None
 
-        self.assertEqual(utils.course_start_datetime_text(sample_start, sample_advertised_start), 'Mar 27, 2016')
+        self.assertEqual(utils.deprecated_start_datetime_text(sample_start, sample_advertised_start), 'Mar 27, 2016')
 
     def test_unparsable_advertised_start(self):
         """
@@ -942,7 +942,7 @@ class TestCourseStartDatetimeText(TestCase):
         sample_start = datetime.datetime(2016, 3, 27, 00, 59, 00, tzinfo=utc)
         sample_advertised_start = 'NOT A PARSEABLE DATE'
         self.assertEqual(
-            utils.course_start_datetime_text(sample_start, sample_advertised_start), 'Not A Parseable Date'
+            utils.deprecated_start_datetime_text(sample_start, sample_advertised_start), 'Not A Parseable Date'
         )
 
     def test_parsable_advertised_start(self):
@@ -951,4 +951,4 @@ class TestCourseStartDatetimeText(TestCase):
         """
         sample_start = datetime.datetime(2016, 3, 27, 00, 59, 00, tzinfo=utc)
         sample_advertised_start = '2016-03-31 00:59:00'
-        self.assertEqual(utils.course_start_datetime_text(sample_start, sample_advertised_start), 'Mar 31, 2016')
+        self.assertEqual(utils.deprecated_start_datetime_text(sample_start, sample_advertised_start), 'Mar 31, 2016')

@@ -40,7 +40,7 @@ from commerce.tests import TEST_PAYMENT_DATA, TEST_API_URL, TEST_API_SIGNING_KEY
 from openedx.core.djangoapps.embargo.test_utils import restrict_course
 from openedx.core.djangoapps.user_api.accounts.api import get_account_settings
 from openedx.core.djangoapps.theming.tests.test_util import with_comprehensive_theme
-from openedx.core.djangoapps.programs.utils import course_start_datetime_text
+from openedx.core.djangoapps.programs.utils import deprecated_start_datetime_text
 from shoppingcart.models import Order, CertificateItem
 from student.tests.factories import UserFactory, CourseEnrollmentFactory
 from student.models import CourseEnrollment
@@ -515,7 +515,7 @@ class TestPayAndVerifyView(UrlResetMixin, ModuleStoreTestCase, XssTestMixin):
             response,
             unicode(course.id),
             course.display_name,
-            course_start_datetime_text(course.start, course.advertised_start),
+            deprecated_start_datetime_text(course.start, course.advertised_start),
             courseware_url
         )
 
