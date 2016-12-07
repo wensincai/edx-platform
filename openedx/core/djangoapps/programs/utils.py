@@ -386,9 +386,6 @@ class ProgramDataExtender(object):
 
     def _attach_run_mode_end_date(self, run_mode):
         run_mode['end_date'] = self.course_overview.end
-        # run_mode['end_date'] = ''
-        # if self.course_overview.end is not None:
-        #     run_mode['end_date'] = strftime_localized(self.course_overview.end.astimezone(utc), "SHORT_DATE")
 
     def _attach_run_mode_enrollment_open_date(self, run_mode):
         run_mode['enrollment_open_date'] = strftime_localized(self.enrollment_start, 'SHORT_DATE')
@@ -409,21 +406,6 @@ class ProgramDataExtender(object):
 
     def _attach_run_mode_start_date(self):
         run_mode['start_date'] = self.course_overview.start_date #.astimezone(utc)
-        # if self.course_overview.advertised_start is not None:
-        #     try:
-        #         # from_json either returns a Date, returns None, or raises a ValueError
-        #         parsed_advertised_start = Date().from_json(self.course_overview.advertised_start)
-        #         if parsed_advertised_start is not None:
-        #             run_mode['start_date'] = strftime_localized(parsed_advertised_start.astimezone(utc), "SHORT_DATE")
-        #     except ValueError:
-        #         pass
-        #     run_mode['start_date'] = self.course_overview.advertised_start.title()
-        # elif self.course_overview.start_date != DEFAULT_ENROLLMENT_START_DATE:
-        #     run_mode['start_date'] = strftime_localized(self.course_overview.start_date.astimezone(utc), "SHORT_DATE")
-        # else:
-        #     # Translators: TBD stands for 'To Be Determined' and is used when a course
-        #     # does not yet have an announced start date.
-        #     run_mode['start_date'] = _('TBD')
 
     def _attach_run_mode_upgrade_url(self, run_mode):
         required_mode_slug = run_mode['mode_slug']

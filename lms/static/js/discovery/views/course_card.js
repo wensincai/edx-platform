@@ -4,24 +4,19 @@
         'underscore',
         'backbone',
         'gettext',
-        'date'
-    ], function($, _, Backbone, gettext, Date) {
+        'edx-ui-toolkit/js/utils/date-utils'
+    ], function($, _, Backbone, gettext, DateUtils) {
         'use strict';
 
         function formatDate(date) {
-            return dateUTC(date).toString('MMM dd, yyyy');
-        }
-
-    // Return a date object using UTC time instead of local time
-        function dateUTC(date) {
-            return new Date(
-            date.getUTCFullYear(),
-            date.getUTCMonth(),
-            date.getUTCDate(),
-            date.getUTCHours(),
-            date.getUTCMinutes(),
-            date.getUTCSeconds()
-        );
+            var context;
+            context = {
+                datetime: date,
+                timezone: '',
+                language: '',
+                format: DateUtils.dateFormatEnum['shortDate']
+            };
+            return DateUtils.localize(context)
         }
 
         return Backbone.View.extend({
