@@ -30,8 +30,9 @@ define([
                     context.run_modes[0].marketing_url
                 );
                 expect(view.$('.course-details .course-text .course-key').html()).toEqual(context.key);
-                expect(view.$('.course-details .course-text .run-period').html())
-                    .toEqual(context.run_modes[0].start_date + ' - ' + context.run_modes[0].end_date);
+                console.log($( '#start_date_span' ).html())
+                expect($( '#start_date_span' ).data('datetime').toEqual(context.run_modes[0].start_date));
+                // + ' - ' + context.run_modes[0].end_date);
             };
 
         beforeEach(function() {
@@ -51,7 +52,7 @@ define([
                     course_key: 'course-v1:ANUx+ANU-ASTRO1x+3T2015',
                     course_started: true,
                     course_url: 'https://courses.example.com/courses/course-v1:edX+DemoX+Demo_Course',
-                    end_date: 'Jun 13, 2019',
+                    end_date: '2019-06-13 12:00',
                     enrollment_open_date: 'Apr 1, 2016',
                     is_course_ended: false,
                     is_enrolled: true,
@@ -59,7 +60,7 @@ define([
                     marketing_url: 'https://www.example.com/marketing/site',
                     mode_slug: 'verified',
                     run_key: '2T2016',
-                    start_date: 'Apr 25, 2016',
+                    start_date: '2016-04-25T12:00',
                     upgrade_url: ''
                 }]
             };
