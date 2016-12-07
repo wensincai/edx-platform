@@ -27,8 +27,10 @@
             <div class="course-text">
 
                 <% if (start_date && end_date) { %>
-                    <span class="run-period"><%- start_date %> - <%- end_date %></span>
-                    - ## WORKHERE
+                    <span class="run-period localized_datetime" data-datetime="<%- start_date %>" data-string="" data-timezone="${user_timezone}" data-language="${user_language}" data-format="shortDate"></span>
+                    <span class="run-period> - </span>
+                    <span class="run-period localized_datetime" data-datetime="<%- end_date %>" data-string="" data-timezone="${user_timezone}" data-language="${user_language}" data-format="shortDate">
+                    -
                 <% } %>
 
                 <span class="course-key"><%- key %></span>

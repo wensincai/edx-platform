@@ -911,12 +911,12 @@ class TestProgramDataExtender(ProgramsApiConfigMixin, ModuleStoreTestCase):
         data = utils.ProgramDataExtender(self.program, self.user).extend()
         self.assertEqual(data['organizations'][0].get('img'), None)
 
-    # def test_course_start_run_mode_date(self):
-    #     """
-    #     test format string generator for course.start
-    #     """
-    #     stringed_start_date = strftime_localized(self.course.start.astimezone(utc), "SHORT_DATE")
-    #     stringed_end_date = strftime_localized(self.course.end.astimezone(utc), "SHORT_DATE")
-    #     data = utils.ProgramDataExtender(self.program, self.user).extend()
-    #     self.assertEqual(data['course_codes'][0]['run_modes'][0]['start_date'], stringed_start_date)
-    #     self.assertEqual(data['course_codes'][0]['run_modes'][0]['end_date'], stringed_end_date)
+    def test_course_start_run_mode_date(self):
+        """
+        test format string generator for course.start
+        """
+        stringed_start_date = strftime_localized(self.course.start.astimezone(utc), "SHORT_DATE")
+        stringed_end_date = strftime_localized(self.course.end.astimezone(utc), "SHORT_DATE")
+        data = utils.ProgramDataExtender(self.program, self.user).extend()
+        self.assertEqual(data['course_codes'][0]['run_modes'][0]['start_date'], stringed_start_date)
+        self.assertEqual(data['course_codes'][0]['run_modes'][0]['end_date'], stringed_end_date)
