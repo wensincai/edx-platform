@@ -110,7 +110,7 @@ Feature: LMS.LTI component
   Then I see LTI component feedback with text "This is awesome."
   And the LTI provider deletes my grade and feedback
   And I visit the LTI component (have to reload)
-  Then I see LTI component progress with text "(10.0 points possible)"
+  Then I see LTI component progress with text "(0.0 / 10.0 points)"
   Then in the LTI component I do not see feedback
   And I click on the "Progress" tab
   Then I see text "Problem Scores: 0/10"

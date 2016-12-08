@@ -231,7 +231,7 @@ class LTI20ModuleMixin(object):
         Returns:
             nothing
         """
-        self.set_user_module_score(user, None, None)
+        self.set_user_module_score(user, 0, self.max_score())
 
     def set_user_module_score(self, user, score, max_score, comment=u""):
         """
