@@ -89,7 +89,7 @@
                         } else if (value.startsWith('cohort')) {
                             return gettext('All learners in the {cohort_name} cohort')
                                 .replace('{cohort_name}', value.slice(value.indexOf(':') + 1));
-                        } else if (value.startswith('track')) {
+                        } else if (value.startsWith('track')) {
                             return gettext('All learners in the {track_name} track')
                                 .replace('{track_name}', value.slice(value.indexOf(':') + 1));
                         }
