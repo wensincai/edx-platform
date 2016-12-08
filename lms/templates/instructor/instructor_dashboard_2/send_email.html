@@ -45,6 +45,19 @@ from openedx.core.djangolib.markup import HTML
                 %endfor
             </ul>
             %endif
+            ## If there's only 1 course mode, everyone is in it and you should just use "All Learners"
+            %if len(section_data['course_modes']) > 1:
+            <ul role="group" class="email-targets-secondary">
+                %for track in section_data['course_modes']:
+                <li>
+                    <input type="checkbox" name="send_to" value="track:${track.mode_slug}" id="target_track_${track.mode_slug}">
+                    <label for="target_track_${track.mode_slug}">
+                        ${_("Track: ") + track.mode_display_name}
+                    </label>
+                </li>
+                %endfor
+            </ul>
+            %endif
         </fieldset>
         </li>
         <li class="field">

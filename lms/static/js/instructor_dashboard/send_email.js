@@ -41,6 +41,7 @@
             this.$emailEditor = XBlock.initializeBlock($('.xblock-studio_view'));
             this.$send_to = this.$container.find("input[name='send_to']");
             this.$cohort_targets = this.$send_to.filter('[value^="cohort:"]');
+            this.$course_mode_targets = this.$send_to.filter('[value^="track:"]');
             this.$subject = this.$container.find("input[name='subject']");
             this.$btn_send = this.$container.find("input[name='send']");
             this.$task_response = this.$container.find('.request-response');
@@ -85,9 +86,12 @@
                             return gettext('Everyone who has staff privileges in this course');
                         } else if (value === 'learners') {
                             return gettext('All learners who are enrolled in this course');
-                        } else {
+                        } else if (value.startsWith('cohort')) {
                             return gettext('All learners in the {cohort_name} cohort')
                                 .replace('{cohort_name}', value.slice(value.indexOf(':') + 1));
+                        } else if (value.startswith('track')) {
+                            return gettext('All learners in the {track_name} track')
+                                .replace('{track_name}', value.slice(value.indexOf(':') + 1));
                         }
                     };
                     successMessage = gettext('Your email message was successfully queued for sending. In courses with a large number of learners, email messages to learners might take up to an hour to be sent.');  // eslint-disable-line max-len
@@ -180,16 +184,20 @@
             this.$send_to.change(function() {
                 var targets;
                 if ($('input#target_learners:checked').length) {
-                    sendemail.$cohort_targets.each(function() {
+                    disable = function() {
                         this.checked = false;
                         this.disabled = true;
                         return true;
-                    });
+                    };
+                    sendemail.$cohort_targets.each(disable);
+                    sendemail.$course_mode_targets.each(disable);
                 } else {
-                    sendemail.$cohort_targets.each(function() {
+                    enable = function() {
                         this.disabled = false;
                         return true;
-                    });
+                    };
+                    sendemail.$cohort_targets.each(enable);
+                    sendemail.$cohort_targets.each(enable);
                 }
                 targets = [];
                 $('input[name="send_to"]:checked+label').each(function() {
