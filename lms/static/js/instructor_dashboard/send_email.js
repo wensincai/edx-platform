@@ -184,7 +184,7 @@
             this.$send_to.change(function() {
                 var targets;
                 if ($('input#target_learners:checked').length) {
-                    disable = function() {
+                    var disable = function() {
                         this.checked = false;
                         this.disabled = true;
                         return true;
@@ -192,7 +192,7 @@
                     sendemail.$cohort_targets.each(disable);
                     sendemail.$course_mode_targets.each(disable);
                 } else {
-                    enable = function() {
+                    var enable = function() {
                         this.disabled = false;
                         return true;
                     };
