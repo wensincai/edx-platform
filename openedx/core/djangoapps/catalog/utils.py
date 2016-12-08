@@ -77,6 +77,42 @@ def get_programs(user=None, uuid=None, type=None):  # pylint: disable=redefined-
         return []
 
 
+def get_program_types(user=None, program_type_name=None):  # pylint: disable=redefined-builtin
+    """Retrieve program types from the catalog service.
+
+    Keyword Arguments:
+        program_type_name (string): Filter program types by name (e.g., "MicroMasters" will only return
+        the MicroMasters program type).
+
+    Returns:
+        list of dict, representing program types.
+        dict, if a specific program type is requested.
+    """
+    catalog_integration = CatalogIntegration.current()
+    if catalog_integration.enabled:
+        user = _get_service_user(user, catalog_integration.service_username)
+        if not user:
+            return []
+
+        api = create_catalog_api_client(user, catalog_integration)
+
+        cache_key = '{base}.program_types{program_type_name}'.format(
+            base=catalog_integration.CACHE_KEY,
+            program_type_name='.' + program_type_name if program_type_name else ''
+        )
+
+        return get_edx_api_data(
+            catalog_integration,
+            user,
+            'program_types',
+            resource_id=program_type_name,
+            cache_key=cache_key if catalog_integration.is_cache_enabled else None,
+            api=api
+        )
+    else:
+        return []
+
+
 def munge_catalog_program(catalog_program):
     """Make a program from the catalog service look like it came from the programs service.
 
