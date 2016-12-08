@@ -208,7 +208,7 @@ class CourseModeTarget(Target):
         """
         if mode_slug is None:
             raise ValueError("Cannot create a CourseModeTarget without specifying a mode_slug.")
-        validate_course_mode(course_id, mode_slug)
+        validate_course_mode(unicode(course_id), mode_slug)
 
 
 class CourseEmail(Email):
