@@ -113,6 +113,16 @@ def get_program_types(user=None, program_type_name=None):  # pylint: disable=red
         return []
 
 
+def get_program_types_lookup_dict():
+    """ Make a lookup dictionary to fetch the program type details from the local cache
+    """
+    program_types = get_program_types()
+    lookup_dict = {}
+    for program_type in program_types:
+        lookup_dict[program_type["name"]] = program_type
+    return lookup_dict
+
+
 def munge_catalog_program(catalog_program):
     """Make a program from the catalog service look like it came from the programs service.
 

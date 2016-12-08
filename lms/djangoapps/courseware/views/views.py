@@ -40,7 +40,7 @@ from lms.djangoapps.instructor.enrollment import uses_shib
 from lms.djangoapps.verify_student.models import SoftwareSecurePhotoVerification
 from lms.djangoapps.ccx.custom_exception import CCXLocatorValidationException
 
-from openedx.core.djangoapps.catalog.utils import get_programs, get_program_types
+from openedx.core.djangoapps.catalog.utils import get_programs, get_program_types_lookup_dict
 import shoppingcart
 import survey.utils
 import survey.views
@@ -151,8 +151,9 @@ def courses(request):
     if configuration_helpers.get_value("DISPLAY_PROGRAMS_ON_MARKETING_PAGES",
                                        settings.FEATURES.get("DISPLAY_PROGRAMS_ON_MARKETING_PAGES")):
         programs_list = get_programs()
+        lookup_dict = get_program_types_lookup_dict()
         for program in programs_list:
-            program['logo_image'] = get_program_types(program_type_name=program['type'])['logo_image']
+            program["logo_image"] = lookup_dict[program["type"]]["logo_image"]
 
     return render_to_response(
         "courseware/courses.html",
