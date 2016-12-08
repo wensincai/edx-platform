@@ -47,7 +47,7 @@ SEND_TO_MYSELF = 'myself'
 SEND_TO_STAFF = 'staff'
 SEND_TO_LEARNERS = 'learners'
 SEND_TO_COHORT = 'cohort'
-SEND_TO_TRACK = 'course_mode'
+SEND_TO_TRACK = 'track'
 EMAIL_TARGET_CHOICES = zip(
     [SEND_TO_MYSELF, SEND_TO_STAFF, SEND_TO_LEARNERS, SEND_TO_COHORT, SEND_TO_TRACK],
     ['Myself', 'Staff and instructors', 'All students', 'Specific cohort', 'Specific course mode']
